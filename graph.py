@@ -1,4 +1,4 @@
-
+#This was me messing around with graphs to see if the equation given for light matched the given graph
 import matplotlib.pyplot as plt 
  
 plt.figure()
