@@ -109,16 +109,13 @@ lights = [0,800,1]
 
 surface_area = 0.5
 
-
-Energy_Levels = []
-Temperature_levels = []
+#lists for axis
 
 x = []  
 y = []
 
 for temp in range(int((temps[1]-temps[0])//temps[2])):
-
-    row = []  
+  
     plant_light = 0
     plant_temp = temp * temps[2] + temps[0]
     a = Plant(plant_light, plant_temp, surface_area, Garden)
@@ -126,9 +123,10 @@ for temp in range(int((temps[1]-temps[0])//temps[2])):
     x.append(plant_temp)
     y.append(a.growth_temp)
     
+#create a graph for only light intensity
 
 plt.plot(x,y)
-plt.xlabel('Temperature')
+plt.xlabel('Temperature (°C)')
 plt.ylabel('Rate of growth')
 plt.title('Effect of temperature on rate of growth')
 plt.show()

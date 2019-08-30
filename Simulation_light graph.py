@@ -117,6 +117,7 @@ Temperature_levels = []
 
 for temp in range(int((temps[1]-temps[0])//temps[2])):
 
+    #lsit for axis
     x = []  
     y = []
     
@@ -130,10 +131,10 @@ for temp in range(int((temps[1]-temps[0])//temps[2])):
         y.append(a.growth_light) 
         
 
-
+#create a graph for only light intensity
 
 plt.plot(x,y)
-plt.xlabel('Light Level')
+plt.xlabel('Light Intensity (W/m^2)')
 plt.ylabel('Rate of growth')
 plt.title('Effect of light on rate of growth')
 

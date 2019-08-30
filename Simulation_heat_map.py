@@ -1,6 +1,6 @@
 
 import matplotlib.pyplot as plt
-
+import numpy as np
 
 class Environment():
 
@@ -27,10 +27,10 @@ class Plant():
 
     # set up constants for temperature based activity
 
-    TEMP_MAX = 37.1  #max temp for best growth
-    TEMP_OPT = 24.6
+    TEMP_MAX = 37.1  #max temp 
+    TEMP_OPT = 24.6  #optimum temp
 
-    RATE_MAX = 0.19
+    RATE_MAX = 0.19  #greatest rate
     
 
     Instances = []
@@ -61,7 +61,7 @@ class Plant():
         light = self.light
         growth = light / ((Plant.A * (light ** 2)) + (Plant.B * light) + Plant.C)
 
-        return growth
+        return growth 
 
 
     # returns energy gained via temperature
@@ -69,7 +69,8 @@ class Plant():
     def calculate_temp(self):
 
         temp = self.temp
-        growth = (Plant.RATE_MAX * ((Plant.TEMP_MAX - temp)/(Plant.TEMP_MAX - Plant.TEMP_OPT)) * (temp / Plant.TEMP_OPT)) * 5
+        #multiplied by 4 to ensure that light and heat had equal importance
+        growth = (Plant.RATE_MAX * ((Plant.TEMP_MAX - temp)/(Plant.TEMP_MAX - Plant.TEMP_OPT)) * (temp / Plant.TEMP_OPT)) * 4
 
         return growth
 
@@ -102,96 +103,66 @@ class Plant():
 
 Garden = Environment(30, 29.5)
 
-##'''
-##myPlant = Plant(35, 35, 0.05, Garden)
-##myPlant.debug_calculation()
-##
-##
-##
-##
-##def remove_float(list_):
-##    newlist_= []
-##
-##    multiplier = 1/list_[2]
-##    print(multiplier)
-##    for thing in list_:
-##        print(thing)
-##        thing = thing * multiplier
-##        newlist_.append(int(thing))
-##    print(newlist_)
-##    return newlist_, int(multiplier)
-##
-##
-##    
-##
-##
-##def array_(temp, light): 
-##    for temperature in range(temp[0][0], temp[0][1]):
-##        temperature = temperature / temp[1]
-##        for level in range(light[0][0], light[0][1]):
-##            level = level/ light[1]
-##            print(temperature,level)
-##
-##temp = [20,30,0.5]
-##light = [50,70,1]
-##
-##
-##temp = remove_float(temp)
-##light = remove_float(light)
-##
-##array_(temp, light)
-##
-##
-##'''
-
-
-
-temps = [1, 37,0.1]
-lights = [0,800,1]
+#range of surrounding stimuli
+temps = [0, 37.1 ,0.1]
+lights = [0,801,1]
 
 surface_area = 0.5
 
-
+#list for heat map
 Energy_Levels = []
 
 
+#this loop creates the rows of the heat map
 
-
-
+#runs throught each possible temperature
+#changes the floats into integers
 for temp in range(int((temps[1]-temps[0])//temps[2])):
 
+    #each temperature has its own row
     row = []  
 
-    
+    #changes the floats into integers
     for light in range(int((lights[1]-lights[0])//lights[2])):
-
+        
+        #returns original value 
         plant_temp = temp * temps[2] + temps[0]
         plant_light = light * lights[2] + lights[0]
+        
+        #enters detail into classes to create an object
         a = Plant(plant_light, plant_temp, surface_area, Garden)
         
+        #calculates total growth from light and temperature function
+        row.append(a.growth_light + a.growth_temp)
 
-        row.append(a.growth_light + a.growth_temp) #a.loss_rate)
-
+    
     Energy_Levels.append(row)
 
+#this was to make the graph neater
+fig, ax = plt.subplots()
 
-
-'''
-
-for plant in Plant.Instances:
-    Energ_Levels.append(plant.growth_temp + plant.growth_light)
-    print('Temp: ', plant.temp,' Light: ', plant.light, ' Growth: ', plant.growth_light+plant.growth_temp)
-
-
-a = [[12,3,12],[1,34,34],[34,12,3]]
-
-'''
-
+#this created a heat map
 plt.imshow(Energy_Levels, cmap='hot', interpolation='nearest')
+#this flipped the y axis
 plt.gca().invert_yaxis()
-plt.xlabel('Light Intensity')
-plt.ylabel('Temperature')
+#labels
+plt.xlabel('Light Intensity (W/m^2)')
+plt.ylabel('Temperature (°C)')
 plt.title('Growth rate depending on light and temperature')
+
+#this was to make sure that temperature was between 0 and 37 rather than measuring the instances
+fig.canvas.draw()
+labels = [item.get_text() for item in ax.get_yticklabels()]
+labels = list(map(int, labels[1:]))
+print(labels)
+
+newlabels = [0]
+for i in labels:
+    i = i/10
+    newlabels.append(i)
+
+#replaces the tick labels
+ax.set_yticklabels(newlabels)
 plt.show()
 
 
