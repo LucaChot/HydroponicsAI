@@ -138,12 +138,12 @@ for temp in range(int((temps[1]-temps[0])//temps[2])):
     
     Energy_Levels.append(row)
 
-#this was to make the graph neater
+#this makes the graph neater
 fig, ax = plt.subplots()
 
-#this created a heat map
+#this creates a heat map, the brighter the area, the greater the rate of growth in that situation
 plt.imshow(Energy_Levels, cmap='hot', interpolation='nearest')
-#this flipped the y axis
+#this flips the y axis
 plt.gca().invert_yaxis()
 #labels
 plt.xlabel('Light Intensity (W/m^2)')
